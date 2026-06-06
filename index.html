@@ -162,7 +162,7 @@ input[type="date"]:focus { border-color: #7C3AED; }
 
 <div class="header">
   <h1>Bath &amp; Body Bro — Instagram</h1>
-  <div class="sub">@bathandbodybro &nbsp;·&nbsp; updated 8:12 AM, Jun 6 2026</div>
+  <div class="sub">@bathandbodybro &nbsp;·&nbsp; updated 8:16 AM, Jun 6 2026</div>
 </div>
 
 <div class="top-nav">
@@ -474,7 +474,6 @@ const mkDs = (data, color, label, dashed) => ({
   borderWidth: dashed ? 1.5 : 2, pointRadius: 0, pointHoverRadius: 4,
 });
 
-const d0 = sliceByDate(DATA_START, DATA_END);
 // Follower hero charts (fixed range — always show all available data)
 const miniOpts = {
   responsive:true, maintainAspectRatio:false, animation:false, spanGaps:false,
@@ -497,7 +496,7 @@ new Chart(document.getElementById('flwBarChart'), {
 });
 
 // Main metric charts
-const d0 = sliceByDate('2025-06-06', DATA_END);
+const d0 = sliceByDate('2025-06-06', DATA_END);  // initial render window
 const viewsChart = new Chart(document.getElementById('viewsChart'), {
   type:'line', data:{labels:d0.labels, datasets:[mkDs(d0.views,'#7C3AED','Views')]}, options:sharedOpts('#7C3AED'),
 });
