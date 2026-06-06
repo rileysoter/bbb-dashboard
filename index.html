@@ -168,7 +168,7 @@ input[type="date"]:focus { border-color: #7C3AED; }
 
 <div class="header">
   <h1>Bath &amp; Body Bro — Instagram</h1>
-  <div class="sub">@bathandbodybro &nbsp;·&nbsp; updated 8:21 AM, Jun 6 2026</div>
+  <div class="sub">@bathandbodybro &nbsp;·&nbsp; updated 8:22 AM, Jun 6 2026</div>
 </div>
 
 <div class="top-nav">
@@ -308,10 +308,10 @@ input[type="date"]:focus { border-color: #7C3AED; }
   <div class="table-wrap">
     <table class="posts-table">
       <thead><tr>
-        <th onclick="sortPosts('date')"         id="th-date">Date <span>↕</span></th>
+        <th onclick="sortPosts('date')"         id="th-date" class="sorted">Date <span>↓</span></th>
         <th>Type</th>
         <th>Caption</th>
-        <th onclick="sortPosts('reach')"        id="th-reach"        class="num sorted">Reach <span>↓</span></th>
+        <th onclick="sortPosts('reach')"        id="th-reach"        class="num">Reach <span>↕</span></th>
         <th onclick="sortPosts('saves')"        id="th-saves"        class="num">Saves <span>↕</span></th>
         <th onclick="sortPosts('interactions')" id="th-interactions" class="num">Interactions <span>↕</span></th>
         <th></th>
@@ -603,7 +603,7 @@ function toggleAnnPanel() {
 }
 
 // ── Posts table ───────────────────────────────────────────────────────────
-let sortKey = 'reach', sortDir = -1, currentPage = 0, activeTypeFilter = '';
+let sortKey = 'date', sortDir = -1, currentPage = 0, activeTypeFilter = '';
 const TYPE_LABEL = {'IMAGE':'Image','CAROUSEL_ALBUM':'Carousel','REELS':'Reel'};
 const fmt2 = n => n ? n.toLocaleString() : '—';
 
@@ -630,7 +630,14 @@ function filteredPosts() {
     (!activeTypeFilter || p.type === activeTypeFilter) &&
     (!pFrom          || p.date >= pFrom) &&
     (!pTo            || p.date <= pTo)
-  ).sort((a,b) => sortDir * (b[sortKey] < a[sortKey] ? -1 : b[sortKey] > a[sortKey] ? 1 : 0));
+  ).sort(function(a, b) {
+    var av = a[sortKey], bv = b[sortKey];
+    if (sortKey !== 'date') {
+      if (!av && bv) return 1;   // push no-data to bottom always
+      if (av && !bv) return -1;
+    }
+    return sortDir * (bv < av ? -1 : bv > av ? 1 : 0);
+  });
 }
 
 function renderPosts() { currentPage = 0; drawPage(); }
