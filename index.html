@@ -168,7 +168,7 @@ input[type="date"]:focus { border-color: #7C3AED; }
 
 <div class="header">
   <h1>Bath &amp; Body Bro — Instagram</h1>
-  <div class="sub">@bathandbodybro &nbsp;·&nbsp; updated 10:20 AM, Jun 6 2026</div>
+  <div class="sub">@bathandbodybro &nbsp;·&nbsp; updated 10:56 AM, Jun 6 2026</div>
 </div>
 
 <div class="top-nav">
@@ -707,12 +707,22 @@ function showSection(id, btn) {
 // ── Init ──────────────────────────────────────────────────────────────────
 document.getElementById('postsBody').addEventListener('click', function(e) {
   var row = e.target.closest('tr[data-url]');
-  if (row) location.href = row.dataset.url;
+  if (row) window.open(row.dataset.url, '_blank');
 });
 
 renderStatCards();
 renderAnnList();
 drawPage();
+
+// Explicitly set initial sort indicator so it's visible on first load
+(function() {
+  var th = document.getElementById('th-date');
+  if (th) {
+    th.classList.add('sorted');
+    var sp = th.querySelector('span');
+    if (sp) sp.textContent = '↓';
+  }
+})();
 </script>
 </body>
 </html>
