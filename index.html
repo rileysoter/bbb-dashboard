@@ -127,7 +127,7 @@ input[type="date"]:focus { border-color: #7C3AED; }
 .caption-text { color: #555; max-width: 320px; }
 .post-link { color: #7C3AED; text-decoration: none; font-size: 11px; }
 .post-link:hover { text-decoration: underline; }
-.post-link-icon { color: #7C3AED; text-decoration: none; font-size: 11px; font-weight: 600; white-space: nowrap; }
+.post-link-icon { color: #7C3AED; background: none; border: none; cursor: pointer; font-size: 11px; font-weight: 600; white-space: nowrap; padding: 0; font-family: inherit; }
 .post-link-icon:hover { text-decoration: underline; }
 .num { text-align: right; font-variant-numeric: tabular-nums; }
 .pagination { display: flex; align-items: center; gap: 8px; margin-top: 14px; justify-content: center; }
@@ -168,7 +168,7 @@ input[type="date"]:focus { border-color: #7C3AED; }
 
 <div class="header">
   <h1>Bath &amp; Body Bro — Instagram</h1>
-  <div class="sub">@bathandbodybro &nbsp;·&nbsp; updated 9:25 AM, Jun 6 2026</div>
+  <div class="sub">@bathandbodybro &nbsp;·&nbsp; updated 9:32 AM, Jun 6 2026</div>
 </div>
 
 <div class="top-nav">
@@ -657,7 +657,7 @@ function drawPage() {
 
   document.getElementById('postsBody').innerHTML = slice.map(function(p) {
     var cap  = p.caption ? escHtml(p.caption) : '<em style="color:#ccc">no caption</em>';
-    var link = p.url ? '<a class="post-link-icon" href="' + p.url + '" target="_blank" rel="noopener noreferrer">Open ↗</a>' : '';
+    var link = p.url ? '<button class="post-link-icon" onclick="window.open(' + JSON.stringify(p.url) + ')">Open ↗</button>' : '';
     return '<tr>' +
       '<td style="white-space:nowrap;color:#aaa;font-size:12px">' + fmtDate(p.date) + '</td>' +
       '<td><span class="type-badge type-' + p.type + '">' + (TYPE_LABEL[p.type]||p.type) + '</span></td>' +
@@ -677,7 +677,8 @@ function drawPage() {
     const th = document.getElementById('th-'+k);
     if (!th) return;
     th.classList.toggle('sorted', k === sortKey);
-    th.querySelector('span').textContent = k===sortKey ? (sortDir===-1?'↓':'↑') : '↕';
+    var sp = th.querySelector('span');
+    if (sp) sp.textContent = k===sortKey ? (sortDir===-1?'↓':'↑') : '↕';
   });
 }
 
