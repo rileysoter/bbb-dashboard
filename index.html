@@ -127,8 +127,8 @@ input[type="date"]:focus { border-color: #7C3AED; }
 .caption-text { color: #555; max-width: 320px; }
 .post-link { color: #7C3AED; text-decoration: none; font-size: 11px; }
 .post-link:hover { text-decoration: underline; }
-.post-link-icon { color: #ccc; text-decoration: none; font-size: 16px; transition: color 0.15s; }
-.post-link-icon:hover { color: #7C3AED; }
+.post-link-icon { color: #7C3AED; text-decoration: none; font-size: 11px; font-weight: 600; white-space: nowrap; }
+.post-link-icon:hover { text-decoration: underline; }
 .num { text-align: right; font-variant-numeric: tabular-nums; }
 .pagination { display: flex; align-items: center; gap: 8px; margin-top: 14px; justify-content: center; }
 .pagination button { padding: 5px 12px; border: 1.5px solid #ddd; border-radius: 6px; background: white; font-size: 13px; cursor: pointer; color: #555; }
@@ -168,7 +168,7 @@ input[type="date"]:focus { border-color: #7C3AED; }
 
 <div class="header">
   <h1>Bath &amp; Body Bro — Instagram</h1>
-  <div class="sub">@bathandbodybro &nbsp;·&nbsp; updated 8:22 AM, Jun 6 2026</div>
+  <div class="sub">@bathandbodybro &nbsp;·&nbsp; updated 9:25 AM, Jun 6 2026</div>
 </div>
 
 <div class="top-nav">
@@ -608,6 +608,9 @@ const TYPE_LABEL = {'IMAGE':'Image','CAROUSEL_ALBUM':'Carousel','REELS':'Reel'};
 const fmt2 = n => n ? n.toLocaleString() : '—';
 
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 function fmtDate(iso) {
   const [y, m, d] = iso.split('-');
   const s = MONTHS[parseInt(m)-1] + ' ' + parseInt(d);
@@ -653,8 +656,8 @@ function drawPage() {
     'Showing ' + (start+1) + '–' + Math.min(start+limit, total) + ' of ' + total.toLocaleString() + ' posts';
 
   document.getElementById('postsBody').innerHTML = slice.map(function(p) {
-    var cap  = p.caption || '<em style="color:#ccc">no caption</em>';
-    var link = p.url ? '<a class="post-link-icon" href="' + p.url + '" target="_blank" title="View on Instagram">↗</a>' : '';
+    var cap  = p.caption ? escHtml(p.caption) : '<em style="color:#ccc">no caption</em>';
+    var link = p.url ? '<a class="post-link-icon" href="' + p.url + '" target="_blank" rel="noopener noreferrer">Open ↗</a>' : '';
     return '<tr>' +
       '<td style="white-space:nowrap;color:#aaa;font-size:12px">' + fmtDate(p.date) + '</td>' +
       '<td><span class="type-badge type-' + p.type + '">' + (TYPE_LABEL[p.type]||p.type) + '</span></td>' +
