@@ -168,7 +168,7 @@ input[type="date"]:focus { border-color: #7C3AED; }
 
 <div class="header">
   <h1>Bath &amp; Body Bro — Instagram</h1>
-  <div class="sub">@bathandbodybro &nbsp;·&nbsp; updated 9:32 AM, Jun 6 2026</div>
+  <div class="sub">@bathandbodybro &nbsp;·&nbsp; updated 9:43 AM, Jun 6 2026</div>
 </div>
 
 <div class="top-nav">
@@ -314,7 +314,6 @@ input[type="date"]:focus { border-color: #7C3AED; }
         <th onclick="sortPosts('reach')"        id="th-reach"        class="num">Reach <span>↕</span></th>
         <th onclick="sortPosts('saves')"        id="th-saves"        class="num">Saves <span>↕</span></th>
         <th onclick="sortPosts('interactions')" id="th-interactions" class="num">Interactions <span>↕</span></th>
-        <th></th>
       </tr></thead>
       <tbody id="postsBody"></tbody>
     </table>
@@ -657,15 +656,14 @@ function drawPage() {
 
   document.getElementById('postsBody').innerHTML = slice.map(function(p) {
     var cap  = p.caption ? escHtml(p.caption) : '<em style="color:#ccc">no caption</em>';
-    var link = p.url ? '<button class="post-link-icon" onclick="window.open(' + JSON.stringify(p.url) + ')">Open ↗</button>' : '';
-    return '<tr>' +
+    var rowClick = p.url ? ' onclick="window.open(' + JSON.stringify(p.url) + ')" style="cursor:pointer"' : '';
+    return '<tr class="post-row"' + rowClick + '>' +
       '<td style="white-space:nowrap;color:#aaa;font-size:12px">' + fmtDate(p.date) + '</td>' +
       '<td><span class="type-badge type-' + p.type + '">' + (TYPE_LABEL[p.type]||p.type) + '</span></td>' +
       '<td class="caption-text">' + cap + '</td>' +
       '<td class="num">' + fmt2(p.reach) + '</td>' +
       '<td class="num">' + fmt2(p.saves) + '</td>' +
       '<td class="num">' + fmt2(p.interactions) + '</td>' +
-      '<td style="text-align:center">' + link + '</td>' +
       '</tr>';
   }).join('');
 
