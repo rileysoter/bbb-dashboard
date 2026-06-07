@@ -168,7 +168,7 @@ input[type="date"]:focus { border-color: #7C3AED; }
 
 <div class="header">
   <h1>Bath &amp; Body Bro — Instagram</h1>
-  <div class="sub">@bathandbodybro &nbsp;·&nbsp; updated 2:37 PM, Jun 7 2026</div>
+  <div class="sub">@bathandbodybro &nbsp;·&nbsp; updated 2:39 PM, Jun 7 2026</div>
 </div>
 
 <div class="top-nav">
@@ -601,7 +601,8 @@ function toggleAnnPanel() {
 }
 
 // ── Posts table ───────────────────────────────────────────────────────────
-let sortKey = 'date', sortDir = -1, currentPage = 0, activeTypeFilter = '';
+let sortKey = 'date', sortDir = 1, currentPage = 0, activeTypeFilter = '';
+// sortDir=1 → descending (newest/highest first); sortDir=-1 → ascending
 const TYPE_LABEL = {'IMAGE':'Image','CAROUSEL_ALBUM':'Carousel','REELS':'Reel'};
 const fmt2 = n => n ? n.toLocaleString() : '—';
 
@@ -678,12 +679,12 @@ function drawPage() {
     if (!th) return;
     th.classList.toggle('sorted', k === sortKey);
     var sp = th.querySelector('span');
-    if (sp) sp.textContent = k===sortKey ? (sortDir===-1?'↓':'↑') : '↕';
+    if (sp) sp.textContent = k===sortKey ? (sortDir===1?'↓':'↑') : '↕';
   });
 }
 
 function sortPosts(key) {
-  sortDir = (sortKey === key) ? sortDir * -1 : -1;
+  sortDir = (sortKey === key) ? sortDir * -1 : 1;
   sortKey = key;
   currentPage = 0;
   drawPage();
@@ -720,7 +721,7 @@ drawPage();
   if (th) {
     th.classList.add('sorted');
     var sp = th.querySelector('span');
-    if (sp) sp.textContent = '↓';
+    if (sp) sp.textContent = sortDir===1 ? '↓' : '↑';
   }
 })();
 </script>
