@@ -168,7 +168,7 @@ input[type="date"]:focus { border-color: #7C3AED; }
 
 <div class="header">
   <h1>Bath &amp; Body Bro — Instagram</h1>
-  <div class="sub">@bathandbodybro &nbsp;·&nbsp; updated 9:04 PM, Jul 1 2026</div>
+  <div class="sub">@bathandbodybro &nbsp;·&nbsp; updated 12:05 AM, Jul 2 2026</div>
 </div>
 
 <div class="top-nav">
@@ -211,7 +211,7 @@ input[type="date"]:focus { border-color: #7C3AED; }
     </div>
   </div>
   <div class="ctrl-group">
-    <input type="date" id="fromDate" value="2025-07-01" onchange="onDateChange()">
+    <input type="date" id="fromDate" value="2025-07-02" onchange="onDateChange()">
     <span style="color:#aaa;font-size:12px">to</span>
     <input type="date" id="toDate"   value="2026-06-30"      onchange="onDateChange()">
   </div>
@@ -503,7 +503,7 @@ new Chart(document.getElementById('flwBarChart'), {
 });
 
 // Main metric charts
-const d0 = sliceByDate('2025-07-01', DATA_END);  // initial render window
+const d0 = sliceByDate('2025-07-02', DATA_END);  // initial render window
 const viewsChart = new Chart(document.getElementById('viewsChart'), {
   type:'line', data:{labels:d0.labels, datasets:[mkDs(d0.views,'#7C3AED','Views')]}, options:sharedOpts('#7C3AED'),
 });
