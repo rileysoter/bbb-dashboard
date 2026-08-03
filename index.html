@@ -128,6 +128,19 @@ input[type="date"]:focus { border-color: #7C3AED; }
 .post-link { color: #7C3AED; text-decoration: none; font-size: 11px; }
 .post-link:hover { text-decoration: underline; }
 .post-link-icon { color: #7C3AED; background: none; border: none; cursor: pointer; font-size: 11px; font-weight: 600; white-space: nowrap; padding: 0; font-family: inherit; }
+
+/* Posts grid (image-forward cards) */
+.posts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 18px; }
+.post-card { border-radius: 12px; overflow: hidden; background: #fff; border: 1px solid #ebebeb; cursor: pointer; transition: transform .15s ease, box-shadow .15s ease; }
+.post-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,0.09); }
+.post-card-img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block; background: #f0f0f0; }
+.post-card-placeholder { display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #aaa; letter-spacing: 0.5px; }
+.post-card-body { padding: 10px 12px 12px; }
+.post-card-meta { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #bbb; margin-bottom: 6px; }
+.post-card-caption { font-size: 12.5px; color: #444; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 8px; min-height: 2.6em; }
+.post-card-stats { display: flex; gap: 12px; font-size: 11px; color: #999; border-top: 1px solid #f5f5f5; padding-top: 8px; }
+.post-card-stats b { color: #555; font-weight: 700; }
+#sortSel { padding: 6px 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 12px; color: #555; background: #fff; }
 .post-link-icon:hover { text-decoration: underline; }
 .num { text-align: right; font-variant-numeric: tabular-nums; }
 .pagination { display: flex; align-items: center; gap: 8px; margin-top: 14px; justify-content: center; }
@@ -173,7 +186,7 @@ input[type="date"]:focus { border-color: #7C3AED; }
 
 <div class="header">
   <h1>Bath &amp; Body Bro — Instagram</h1>
-  <div class="sub">@bathandbodybro &nbsp;·&nbsp; updated 11:47 AM, Aug 3 2026</div>
+  <div class="sub">@bathandbodybro &nbsp;·&nbsp; updated 11:54 AM, Aug 3 2026</div>
 </div>
 
 <div class="top-nav">
@@ -308,21 +321,16 @@ input[type="date"]:focus { border-color: #7C3AED; }
         <option value="50">50/page</option>
         <option value="100">100/page</option>
       </select>
+      <select id="sortSel" onchange="sortPosts(this.value)">
+        <option value="date">Newest first</option>
+        <option value="reach">Top reach</option>
+        <option value="saves">Top saves</option>
+        <option value="interactions">Top interactions</option>
+      </select>
       <span class="posts-meta" id="postsMeta"></span>
     </div>
   </div>
-  <div class="table-wrap">
-    <table class="posts-table">
-      <thead><tr>
-        <th style="width:60px"></th>
-        <th onclick="sortPosts('date')" id="th-date" class="sorted">Post <span>↓</span></th>
-        <th onclick="sortPosts('reach')"        id="th-reach"        class="num">Reach <span>↕</span></th>
-        <th onclick="sortPosts('saves')"        id="th-saves"        class="num">Saves <span>↕</span></th>
-        <th onclick="sortPosts('interactions')" id="th-interactions" class="num">Interactions <span>↕</span></th>
-      </tr></thead>
-      <tbody id="postsBody"></tbody>
-    </table>
-  </div>
+  <div id="postsBody" class="posts-grid"></div>
   <div class="pagination">
     <button id="prevBtn" onclick="changePage(-1)">← Prev</button>
     <span id="pageInfo"></span>
@@ -741,38 +749,37 @@ function drawPage() {
     'Showing ' + (start+1) + '–' + Math.min(start+limit, total) + ' of ' + total.toLocaleString() + ' posts';
 
   document.getElementById('postsBody').innerHTML = slice.map(function(p) {
-    var cap = p.caption ? escHtml(p.caption) : '';
-    var rowAttrs = p.url ? ' data-url="' + escHtml(p.url) + '" style="cursor:pointer"' : '';
-    var placeholderHtml = '<div style="width:52px;height:52px;border-radius:6px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#aaa">' + (TYPE_LABEL[p.type]||p.type).toUpperCase() + '</div>';
+    var cap = p.caption ? escHtml(p.caption) : '<em style="color:#ccc">No caption</em>';
+    var cardAttrs = p.url ? ' data-url="' + escHtml(p.url) + '"' : '';
+    var typeLabel = (TYPE_LABEL[p.type]||p.type||'').toUpperCase();
     var thumb = p.thumb
-      ? '<img src="' + p.thumb + '" style="width:52px;height:52px;object-fit:cover;border-radius:6px;display:block" loading="lazy" onerror="this.outerHTML=' + JSON.stringify(placeholderHtml) + '">'
-      : placeholderHtml;
-    var meta = '<div style="font-size:11px;color:#bbb;margin-top:3px">' + fmtDate(p.date) + ' &nbsp;·&nbsp; <span class="type-badge type-' + p.type + '" style="font-size:9px">' + (TYPE_LABEL[p.type]||p.type) + '</span></div>';
-    return '<tr class="post-row"' + rowAttrs + '>' +
-      '<td style="padding:8px 10px 8px 0;width:52px">' + thumb + '</td>' +
-      '<td class="caption-text">' + cap + meta + '</td>' +
-      '<td class="num">' + fmt2(p.reach) + '</td>' +
-      '<td class="num">' + fmt2(p.saves) + '</td>' +
-      '<td class="num">' + fmt2(p.interactions) + '</td>' +
-      '</tr>';
+      ? '<img class="post-card-img" src="' + p.thumb + '" data-type="' + p.type + '" loading="lazy" onerror="thumbFallback(this)">'
+      : '<div class="post-card-img post-card-placeholder">' + typeLabel + '</div>';
+    return '<div class="post-card"' + cardAttrs + '>' +
+      thumb +
+      '<div class="post-card-body">' +
+      '<div class="post-card-meta">' + fmtDate(p.date) + ' &nbsp;·&nbsp; <span class="type-badge type-' + p.type + '">' + (TYPE_LABEL[p.type]||p.type) + '</span></div>' +
+      '<div class="post-card-caption">' + cap + '</div>' +
+      '<div class="post-card-stats"><span><b>' + fmt2(p.reach) + '</b> reach</span><span><b>' + fmt2(p.saves) + '</b> saves</span><span><b>' + fmt2(p.interactions) + '</b> int.</span></div>' +
+      '</div></div>';
   }).join('');
 
   document.getElementById('pageInfo').textContent = 'Page '+(currentPage+1)+' of '+Math.ceil(total/limit);
   document.getElementById('prevBtn').disabled = currentPage === 0;
   document.getElementById('nextBtn').disabled = start+limit >= total;
+}
 
-  ['date','reach','saves','interactions'].forEach(function(k) {
-    const th = document.getElementById('th-'+k);
-    if (!th) return;
-    th.classList.toggle('sorted', k === sortKey);
-    var sp = th.querySelector('span');
-    if (sp) sp.textContent = k===sortKey ? (sortDir===1?'↓':'↑') : '↕';
-  });
+function thumbFallback(img) {
+  var label = (TYPE_LABEL[img.dataset.type]||img.dataset.type||'').toUpperCase();
+  var d = document.createElement('div');
+  d.className = 'post-card-img post-card-placeholder';
+  d.textContent = label;
+  img.replaceWith(d);
 }
 
 function sortPosts(key) {
-  sortDir = (sortKey === key) ? sortDir * -1 : 1;
   sortKey = key;
+  sortDir = 1;
   currentPage = 0;
   drawPage();
 }
@@ -949,23 +956,13 @@ function showSection(id, btn) {
 
 // ── Init ──────────────────────────────────────────────────────────────────
 document.getElementById('postsBody').addEventListener('click', function(e) {
-  var row = e.target.closest('tr[data-url]');
-  if (row) window.open(row.dataset.url, '_blank');
+  var card = e.target.closest('.post-card[data-url]');
+  if (card) window.open(card.dataset.url, '_blank');
 });
 
 renderStatCards();
 renderAnnList();
 drawPage();
-
-// Explicitly set initial sort indicator so it's visible on first load
-(function() {
-  var th = document.getElementById('th-date');
-  if (th) {
-    th.classList.add('sorted');
-    var sp = th.querySelector('span');
-    if (sp) sp.textContent = sortDir===1 ? '↓' : '↑';
-  }
-})();
 </script>
 </body>
 </html>
