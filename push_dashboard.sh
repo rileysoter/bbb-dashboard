@@ -10,7 +10,7 @@ open('/tmp/_dash_check.js','w').write(s)
 "
 /opt/homebrew/bin/node --check /tmp/_dash_check.js || { echo "JS syntax error — aborting push"; exit 1; }
 
-git add index.html
+git add -A
 git diff --cached --quiet && exit 0  # nothing changed, skip push
 git commit -m "auto: update $(date '+%Y-%m-%d %H:%M')"
 git push origin main
