@@ -186,7 +186,7 @@ input[type="date"]:focus { border-color: #7C3AED; }
 
 <div class="header">
   <h1>@bathandbodybro analytics</h1>
-  <div class="sub">Instagram &amp; Facebook &nbsp;·&nbsp; updated 9:07 PM, Oct 18 2026</div>
+  <div class="sub">Instagram &amp; Facebook &nbsp;·&nbsp; updated 12:23 AM, Oct 19 2026</div>
 </div>
 
 <div class="top-nav">
@@ -231,7 +231,7 @@ input[type="date"]:focus { border-color: #7C3AED; }
     </div>
   </div>
   <div class="ctrl-group">
-    <input type="date" id="fromDate" value="2025-10-18" onchange="onDateChange()">
+    <input type="date" id="fromDate" value="2025-10-19" onchange="onDateChange()">
     <span style="color:#aaa;font-size:12px">to</span>
     <input type="date" id="toDate"   value="2026-10-16"      onchange="onDateChange()">
   </div>
@@ -429,7 +429,7 @@ input[type="date"]:focus { border-color: #7C3AED; }
   <div class="card cyan">
     <div class="value">4,455</div>
     <div class="label">Page Fans</div>
-    <div class="sub-value">as of 9:07 PM, Oct 18 2026</div>
+    <div class="sub-value">as of 12:23 AM, Oct 19 2026</div>
   </div>
   <div class="card purple">
     <div class="value">293</div>
@@ -653,7 +653,7 @@ new Chart(document.getElementById('flwBarChart'), {
 });
 
 // Main metric charts
-const d0 = sliceByDate('2025-10-18', DATA_END);  // initial render window
+const d0 = sliceByDate('2025-10-19', DATA_END);  // initial render window
 const viewsChart = new Chart(document.getElementById('viewsChart'), {
   type:'line', data:{labels:d0.labels, datasets:[mkDs(d0.views,'#7C3AED','Views')]}, options:sharedOpts('#7C3AED'),
 });
